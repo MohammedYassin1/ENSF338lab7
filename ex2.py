@@ -62,34 +62,41 @@ def insert(data, root=None):
     old_balance = root.balance_factor
     root.balance(root)  
     pivot = root.get_pivot(newnode)
+    
+    
     if pivot is None:
         print("Case #1: Pivot not detected")
-    elif abs(pivot.balance_factor) < abs(old_balance):
-        print("Case #2: A pivot exists, and a node was added to the shorter subtree")
     else:
-        print("Case #3: Not supported")
+        
+        if newnode.data < pivot.data:
+            if pivot.balance_factor > 0:
+                print("Case #3: Not supported")
+            else:
+                print("Case #2: A pivot exists, and a node was added to the shorter subtree")
+
+        else:
+            if pivot.balance_factor > 0:
+                print("Case #2: A pivot exists, and a node was added to the shorter subtree")
+            else:
+                print("Case #3: Not supported")
     return
+
 
 
 # Test case 1: Adding a node results in case 1
 root = Node(10)
-insert(5, root)  # Case #1
-
-# Test case 2: Adding a node results in case 2
+insert(5, root)  
+# Test case 2: Adding a node results in case 2 
 root = Node(10)
-insert(15, root)  # Case #1
-insert(5, root)   # Case #2
-
+insert(15, root)  
+insert(20, root)
+insert(25, root)  
+insert(5, root)  
 # Test case 3: Adding a node results in case 3
 root = Node(10)
-insert(15, root)  # Case #1
-insert(20, root)  # Case #2
-insert(25, root)  # Case #3
+insert(5, root)
+insert(4, root) 
 
-# Test case 4: Adding a node results in case 1, 2 and 3
-root = Node(10)
-insert(5, root)  # Case #1
-insert(15, root)  # Case #2
-insert(20, root)  # Case #3
+
 
 
