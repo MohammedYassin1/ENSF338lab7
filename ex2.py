@@ -73,23 +73,23 @@ def insert(data, root=None):
 
 # Test case 1: Adding a node results in case 1
 root = Node(10)
-root.insert(5)  # Case #1: Pivot not detected
+insert(5, root)  # Case #1
 
 # Test case 2: Adding a node results in case 2
 root = Node(10)
-root.insert(15)  # Case #1: Pivot not detected
-root.insert(5)   # Case #2: A pivot exists, and a node was added to the shorter subtree
+insert(15, root)  # Case #1
+insert(5, root)   # Case #2
 
 # Test case 3: Adding a node results in case 3
 root = Node(10)
-root.insert(15)  # Case #1: Pivot not detected
-root.insert(20)  # Case #2: A pivot exists, and a node was added to the shorter subtree
-root.insert(25)  # Case #3: Not supported (Assuming this is when a pivot exists, and a node was added to the longer subtree)
+insert(15, root)  # Case #1
+insert(20, root)  # Case #2
+insert(25, root)  # Case #3
 
 # Test case 4: Adding a node results in case 1, 2 and 3
 root = Node(10)
-root.insert(5)  # Case #1: Pivot not detected
-root.insert(15)  # Case #2: A pivot exists, and a node was added to the shorter subtree
-root.insert(20)  # Case #3: Not supported (Assuming this is when a pivot exists, and a node was added to the longer subtree)
+insert(5, root)  # Case #1
+insert(15, root)  # Case #2
+insert(20, root)  # Case #3
 
 
