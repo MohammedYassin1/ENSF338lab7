@@ -4,67 +4,80 @@ import matplotlib.pyplot as plt
 
 #1.
 class Node:
-    def __init__(self, data, parent=None, left=None, right=None):
+    def __init__(self, data, parent=None, left=None, right=None, balance_factor = 0):
         self.parent = parent
         self.data = data
         self.left = left
-        self.right = right  
-
-    def insert(self, data):
-        if data <= self.data:
-            if self.left is None:
-                self.left = Node(data, parent=self)
-            else:
-                self.left.insert(data)
-        else:
-            if self.right is None:
-                self.right = Node(data, parent=self)
-            else:
-                self.right.insert(data)
-
-    def search(self, data):
-        if data == self.data:
-            return True
-        elif data < self.data:
-            if self.left is None:
-                return False
-            else:
-                return self.left.search(data)
-        else:
-            if self.right is None:
-                return False
-            else:
-                return self.right.search(data)
-
-#2.
-
-def height(node):
-    if node is None:
-        return 0
-    return max(height(node.left), height(node.right)) + 1
-
-def measure_balance(root, balance_list):
-    if root is None:
-        return 0
-
-    left_height = height(root.left)
-    right_height = height(root.right)
-
-    balance = abs(left_height - right_height)
-    balance_list.append(balance)
-    # Measure balance for left and right subtrees
-    measure_balance(root.left, balance_list)
-    measure_balance(root.right, balance_list)
-
-    return balance_list
+        self.right = right
+        self.balance_factor = balance_factor  
     
+    #2.
+           
+    def height(self, node):
+        if node is None:
+            return -1
+        return max(self.height(node.left), self.height(node.right)) + 1
+    
+    def balance(self, node):
+        if node is None:
+            return 0
+
+        left_height = self.height(node.left)
+        right_height = self.height(node.right)
+
+        node.balance_factor = left_height - right_height
+
+        # Recursively update balance for left and right subtrees
+        self.balance(node.left)
+        self.balance(node.right)
+
+def insert(data, root=None):
+    current = root
+    parent = None
+
+    while current is not None:
+        parent = current
+        if data <= current.data:
+            current = current.left
+        else:
+            current = current.right
+
+    newnode = Node(data, parent)    
+    if root is None:
+        root = newnode
+    elif data <= parent.data:
+        parent.left = newnode
+    else:
+        parent.right = newnode
+
+    root.balance(root)  
+    return
+
+def search(data, root):
+    current = root
+    while current is not None:
+        if data == current.data:
+            return current
+        elif data <= current.data:
+            current = current.left
+        else:
+            current = current.right
+    return None
+
+def get_balances(root):
+    if root is None:
+        return []
+    return [root.balance_factor] + get_balances(root.left) + get_balances(root.right)  # use 'balance_factor' instead of 'balance'
+
+
 
 #3.
+
 
 numbers = list(range(1, 1001))
 
 tasks = []
-for _ in range(1000):
+for z in range(1000):
     random.shuffle(numbers)
     tasks.append(numbers.copy())
 
@@ -78,14 +91,13 @@ for task in tasks:
     root = Node(task[0])
     balance = 0
     for element in task:
-        root.insert(element)
-    balance_list = []
-    balance_list = measure_balance(root, balance_list)
+        insert(element, root)
+    balance_list = get_balances(root)
     balance = max(balance_list)
     total_balance.append(balance)
     total_time = 0
-    for elemetn in task:
-        time = timeit.timeit(lambda: root.search(element), number=1)
+    for e in task:
+        time = timeit.timeit(lambda: search(e, root), number=1)
         total_time += time
     average_time = total_time / 1000
     total_average_time.append(average_time)
@@ -99,6 +111,7 @@ plt.ylabel('Search Time')
 plt.title('Balance vs Search Time')
 
 plt.show()
+
 
 
         
